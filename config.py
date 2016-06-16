@@ -1,0 +1,1 @@
+BASE_URL = '/rec-engine/api/v1.0/'
