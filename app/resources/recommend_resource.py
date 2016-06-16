@@ -5,7 +5,7 @@ from app.rec_engine.recommendation_engine import RecommendationEngine
 
 @app.route(BASE_URL + 'recommendations', methods=['GET'])
 def get_all_recs():
-    return jsonify({'numRecs': 10})
+    return jsonify({'numRecs': 12})
 
 @app.route(BASE_URL + 'users/<int:user_id>/recommendations', methods=['GET'])
 def get_recs_for_user(user_id):
