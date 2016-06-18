@@ -70,9 +70,9 @@ class RecommendationEngine:
         return user_exists, recs[:self.MAX_RECS]
 
     def load_data(self):
-        all_users = pd.read_csv('users.csv')
-        all_movies = pd.read_csv('movies.csv')
-        all_ratings = pd.read_csv('ratings.csv')
+        all_users = pd.read_csv('data/users.csv')
+        all_movies = pd.read_csv('data/movies.csv')
+        all_ratings = pd.read_csv('data/ratings.csv')
         return all_users, all_movies, all_ratings
 
     def square_rooted(self,x):
