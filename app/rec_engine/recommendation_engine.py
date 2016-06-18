@@ -29,6 +29,7 @@ class RecommendationEngine:
                     user_movies_rated = set(ratings[ratings['user_id'] == user_id].movie_id)
                     comp_user_movies_rated = set(ratings[ratings['user_id'] == i].movie_id)
                     jac = self.jaccard_similarity(user_movies_rated, comp_user_movies_rated)
+
                     df_sim_scores.loc[len(df_sim_scores)] = [i, jac]
 
             df_sim_scores[['id']] = df_sim_scores[['id']].astype(int)
