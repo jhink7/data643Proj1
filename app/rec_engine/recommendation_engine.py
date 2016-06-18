@@ -1,5 +1,6 @@
 from math import*
 import pandas as pd
+import numpy as np
 
 class RecommendationEngine:
     def __init__(self):
@@ -11,13 +12,33 @@ class RecommendationEngine:
         similiarity = self.jaccard_similarity(['title1', 'title2', 'title3'], ['title3'])
         users, movies, ratings = self.load_data()
 
-        #users = users.sort(['name'])
-        return similiarity
+        user_exists = False
+        all_user_ids = users.id.values[:]
+
+        # ensure user requested exists in database
+        # if not, bubble this info to resource layer which will throw the appropriate http error
+        if user_id in all_user_ids:
+            user_exists = True
+
+            # get list of users who we want to generate similarity scores for
+            comp_user_ids =  np.array(filter(lambda x: x != user_id, all_user_ids))
+
+            df_sim_scores = pd.DataFrame(columns=['id', 'jac'])
+
+            for i in comp_user_ids:
+                    user_movies_rated = set(ratings[ratings['user_id'] == user_id].movie_id)
+                    comp_user_movies_rated = set(ratings[ratings['user_id'] == i].movie_id)
+                    jac = self.jaccard_similarity(user_movies_rated, comp_user_movies_rated)
+                    df_sim_scores.loc[len(df_sim_scores)] = [i, jac]
+
+            df_sim_scores[['id']] = df_sim_scores[['id']].astype(int)
+            print df_sim_scores
+        return user_exists, similiarity
 
     def load_data(self):
-        all_users = pd.DataFrame.from_csv('users.csv')
-        all_movies = pd.DataFrame.from_csv('movies.csv')
-        all_ratings = pd.DataFrame.from_csv('ratings.csv')
+        all_users = pd.read_csv('users.csv')
+        all_movies = pd.read_csv('movies.csv')
+        all_ratings = pd.read_csv('ratings.csv')
         return all_users, all_movies, all_ratings
 
     def square_rooted(self,x):

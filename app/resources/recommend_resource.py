@@ -10,5 +10,7 @@ def get_all_recs():
 @app.route(BASE_URL + 'users/<int:user_id>/recommendations', methods=['GET'])
 def get_recs_for_user(user_id):
     recEngine = RecommendationEngine()
-    recs = recEngine.generate_recommendations(user_id)
+    user_exists, recs = recEngine.generate_recommendations(user_id)
+    if not user_exists:
+        abort(404)
     return jsonify({'numRecs': recs})
