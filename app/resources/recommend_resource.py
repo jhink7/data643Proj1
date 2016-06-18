@@ -13,4 +13,4 @@ def get_recs_for_user(user_id):
     user_exists, recs = recEngine.generate_recommendations(user_id)
     if not user_exists:
         abort(404)
-    return jsonify({'numRecs': recs})
+    return jsonify({'top_picks': recs})
